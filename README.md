@@ -5,7 +5,7 @@ The aim of the assignment was to examine different properties of a given graph (
 In order to use this programme, it needs to be executed on a .txt file containing a sample graph. The graph's information should be formatted as is exemplified in the file 'SampleGraph.txt', which corresponds to the following diagram:
 
 [comment]: <> (Here goes the diagram of the graph.)
-![alt text](C:\Users\sofia\Desktop\Coding\private-github-repositories\connection_delivery_OPT\SampleGraphDiagram.png)
+![Alt text](SampleGraphDiagram.png?raw=true "Sample graph's diagram")
 
 
 1. Ex1.c : Checking the connectedness of a graph. Given the following definition of connectedness:
