@@ -3,24 +3,100 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
+// Define a structure for a node in the queue
+typedef struct QueueElementStructure {
+    unsigned short vertex;
+    struct QueueElementStructure* seg; // Pointer to the next element in the queue
+} QueueElement;
+
+// Define the queue structure
+typedef struct {
+    QueueElement* start; // Pointer to the first element in the queue
+    QueueElement* end;   // Pointer to the last element in the queue
+} Queue;
+
+// Check if the queue is empty
+int IsEmpty(Queue Q) {
+    return (Q.start == NULL);
+}
+
+// Enqueue an element into the queue
+int enqueue(unsigned short vert2Q, Queue* Q) {
+    // Create a new queue element
+    QueueElement* aux = (QueueElement*)malloc(sizeof(QueueElement));
+    if (aux == NULL)
+        return 0; // Return 0 if memory allocation fails
+
+    aux->vertex = vert2Q;
+    aux->seg = NULL;
+
+    if (Q->start)
+        Q->end->seg = aux;
+    else
+        Q->start = aux;
+    Q->end = aux;
+
+    return 1; // Return 1 to indicate successful enqueue
+}
+
+// Dequeue an element from the queue
+unsigned int dequeue(Queue* Q) {
+    if (IsEmpty(*Q))
+        return UINT_MAX; // Return a maximum value to indicate an empty queue
+
+    QueueElement* node_inicial = Q->start;
+    unsigned int v = node_inicial->vertex;
+    Q->start = Q->start->seg;
+    free(node_inicial);
+
+    return v;
+}
+
+// Define a structure for a graph node
 typedef struct {
     unsigned nedges;
-    unsigned edges[8]; // limit of edges in a node = 8
-    int visited; // New field to track visited nodes
+    unsigned edges[8];
+    int visited;
 } node;
 
-void DFS(node* nodelist, unsigned node_idx, unsigned gorder) {
-    nodelist[node_idx].visited = 1;
-    for (unsigned i = 0; i < nodelist[node_idx].nedges; i++) {
-        unsigned neighbor = nodelist[node_idx].edges[i];
-        if (!nodelist[neighbor].visited) {
-            DFS(nodelist, neighbor, gorder);
+// Function to check if the graph is connected using BFS
+int isGraphConnected(node* nodelist, unsigned gorder) {
+    Queue q;
+    q.start = q.end = NULL;
+
+    // Start BFS from the first node
+    nodelist[0].visited = 1;
+    enqueue(0, &q);
+
+    while (!IsEmpty(q)) {
+        unsigned current = dequeue(&q);
+        for (unsigned i = 0; i < nodelist[current].nedges; i++) {
+            unsigned neighbor = nodelist[current].edges[i];
+            if (!nodelist[neighbor].visited) {
+                nodelist[neighbor].visited = 1;
+                enqueue(neighbor, &q);
+            }
         }
     }
+
+    for (unsigned i = 0; i < gorder; i++) {
+        if (nodelist[i].visited == 0) {
+            return 0; // The graph is not connected
+        }
+    }
+
+    return 1; // The graph is connected
 }
 
 int main(int argc, char* argv[]) {
+    // Check for the correct number of command line arguments
+    if (argc != 2) {
+        printf("Usage: %s <graph_file>\n", argv[0]);
+        return -1;
+    }
+
     FILE* defgraph;
     node* nodelist;
     unsigned i, j;
@@ -31,17 +107,23 @@ int main(int argc, char* argv[]) {
         printf("\nERROR: Data file not found.\n");
         return -1;
     }
+
+    // Read the number of nodes and edges from the file
     fscanf(defgraph, "%u", &gorder);
     fscanf(defgraph, "%u", &gsize);
+
     if ((nodelist = (node*)malloc(gorder * sizeof(node))) == NULL) {
         fprintf(stderr, "\nERROR: not enough memory for allocating the nodes\n\n");
         return 2;
     }
+
     printf("%s defines a graph with %d nodes and %d edges.\n", argv[1], gorder, gsize);
+
     for (i = 0; i < gorder; i++) {
         nodelist[i].nedges = 0;
         nodelist[i].visited = 0;
     }
+
     for (j = 0; j < gsize; j++) {
         fscanf(defgraph, "%u %u", &or, &dest);
         nodelist[or].edges[nodelist[or].nedges] = dest;
@@ -49,23 +131,16 @@ int main(int argc, char* argv[]) {
         nodelist[dest].edges[nodelist[dest].nedges] = or;
         nodelist[dest].nedges++;
     }
+
     fclose(defgraph);
 
-    // Start DFS from the first node
-    DFS(nodelist, 0, gorder);
-
-    // Check if all nodes were visited
-    for (i = 0; i < gorder; i++) {
-        if (nodelist[i].visited == 0) {
-            // The graph is not connected
-            printf("The graph is not connected.\n");
-            free(nodelist);
-            return 0;
-        }
+    int isConnected = isGraphConnected(nodelist, gorder);
+    if (isConnected) {
+        printf("The graph is connected.\n");
+    } else {
+        printf("The graph is not connected.\n");
     }
 
-    // The graph is connected
-    printf("The graph is connected.\n");
     free(nodelist);
-    return 1;
+    return isConnected;
 }
