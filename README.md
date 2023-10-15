@@ -26,7 +26,7 @@ Node 3 has 2 edges:
 # 1. Graph connectedness
 Ex1.c : Examines the information of the .txt file and determines whether the graph is connected or not connected. The connectedness of an undirected graph is defined as
 
-[comment] <> (Here is the definition of connectedness)
+[comment]: <> (Here is the definition of connectedness)
 
 
 The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.
