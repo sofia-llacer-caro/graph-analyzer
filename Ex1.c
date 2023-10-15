@@ -5,163 +5,153 @@
 #include <stdlib.h>
 #include <limits.h>
 
-/*
----------------------
-1. Queue structure
----------------------
-*/
-
+/*Define structures used later*/
 
 // Define a structure for a node in the queue
-typedef struct QueueElementStructure {
-    unsigned short vertex;
-    struct QueueElementStructure* seg; // Pointer to the next element in the queue
-} QueueElement;
+typedef struct GraphNodeStructure {
+    unsigned short node;
+    struct GraphNodeStructure* next;
+    unsigned numNeighbors;
+    unsigned neighbors[8];
+    int visited;
+} GraphNodeStructure;
 
 // Define the queue structure
-typedef struct {
-    QueueElement* start; // Pointer to the first element in the queue
-    QueueElement* end;   // Pointer to the last element in the queue
+typedef struct Queue {
+    GraphNodeStructure* front;
+    GraphNodeStructure* rear;
 } Queue;
 
-// Check if the queue is empty
-int IsEmpty(Queue Q) {
-    return (Q.start == NULL);
+/*Define functions*/
+
+
+    /*Queue*/
+int IsGraphQueueEmpty(Queue* Q) {
+    return (Q->front == NULL);
 }
 
-// Enqueue an element into the queue
-int enqueue(unsigned short vert2Q, Queue* Q) {
-    // Create a new queue element
-    QueueElement* aux = (QueueElement*)malloc(sizeof(QueueElement));
-    if (aux == NULL)
-        return 0; // Return 0 if memory allocation fails
+int EnqueueGraphNode(unsigned short nodeValue, Queue* Q) {
+    GraphNodeStructure* newNode = (GraphNodeStructure*)malloc(sizeof(GraphNodeStructure));
+    if (newNode == NULL)
+        return 0;
 
-    aux->vertex = vert2Q;
-    aux->seg = NULL;
+    newNode->node = nodeValue;
+    newNode->next = NULL;
 
-    if (Q->start)
-        Q->end->seg = aux;
+    if (Q->front)
+        Q->rear->next = newNode;
     else
-        Q->start = aux;
-    Q->end = aux;
+        Q->front = newNode;
+    Q->rear = newNode;
 
-    return 1; // Return 1 to indicate successful enqueue
+    return 1;
 }
 
-// Dequeue an element from the queue
-unsigned int dequeue(Queue* Q) {
-    if (IsEmpty(*Q))
-        return UINT_MAX; // Return a maximum value to indicate an empty queue
+unsigned int DequeueGraphNode(Queue* Q) {
+    if (IsGraphQueueEmpty(Q))
+        return UINT_MAX;
 
-    QueueElement* node_inicial = Q->start;
-    unsigned int v = node_inicial->vertex;
-    Q->start = Q->start->seg;
-    free(node_inicial);
+    GraphNodeStructure* initialNode = Q->front;
+    unsigned int nodeValue = initialNode->node;
+    Q->front = Q->front->next;
+    free(initialNode);
 
-    return v;
+    return nodeValue;
 }
 
-/*
----------------------
-2. Node structure
----------------------
-*/
+    /*Connectedness*/
 
+int IsGraphConnected(GraphNodeStructure* nodeList, unsigned numNodes) {
+    Queue queue;
+    queue.front = queue.rear = NULL;
 
-// Define a structure for a graph node
-typedef struct {
-    unsigned nedges;
-    unsigned edges[8];
-    int visited;
-} node;
+    nodeList[0].visited = 1;
+    EnqueueGraphNode(0, &queue);
 
-/*
----------------------
-3. BFS algorithm
----------------------
-*/
-
-
-// Function to check if the graph is connected using BFS
-int isGraphConnected(node* nodelist, unsigned gorder) {
-    Queue q;
-    q.start = q.end = NULL;
-
-    // Start BFS from the first node
-    nodelist[0].visited = 1;
-    enqueue(0, &q);
-
-    while (!IsEmpty(q)) {
-        unsigned current = dequeue(&q);
-        for (unsigned i = 0; i < nodelist[current].nedges; i++) {
-            unsigned neighbor = nodelist[current].edges[i];
-            if (!nodelist[neighbor].visited) {
-                nodelist[neighbor].visited = 1;
-                enqueue(neighbor, &q);
+    while (!IsGraphQueueEmpty(&queue)) {
+        unsigned currentNode = DequeueGraphNode(&queue);
+        for (unsigned i = 0; i < nodeList[currentNode].numNeighbors; i++) {
+            unsigned neighbor = nodeList[currentNode].neighbors[i];
+            if (!nodeList[neighbor].visited) {
+                nodeList[neighbor].visited = 1;
+                EnqueueGraphNode(neighbor, &queue);
             }
         }
     }
 
-    for (unsigned i = 0; i < gorder; i++) {
-        if (nodelist[i].visited == 0) {
-            return 0; // The graph is not connected
+    for (unsigned i = 0; i < numNodes; i++) {
+        if (nodeList[i].visited == 0) {
+            return 0;
         }
     }
 
-    return 1; // The graph is connected
+    return 1;
 }
 
+    /*Read file*/
+
+int ReadGraphFromFile(const char* fileName, GraphNodeStructure** nodeList, unsigned* numNodes, unsigned* numEdges) {
+    FILE* graphFile = fopen(fileName, "r");
+    if (graphFile == NULL) {
+        printf("\nERROR: Data file not found.\n");
+        return -1;
+    }
+
+    fscanf(graphFile, "%u", numNodes);
+    fscanf(graphFile, "%u", numEdges);
+
+    *nodeList = (GraphNodeStructure*)malloc(*numNodes * sizeof(GraphNodeStructure));
+
+    for (unsigned i = 0; i < *numNodes; i++) {
+        (*nodeList)[i].numNeighbors = 0;
+        (*nodeList)[i].visited = 0;
+    }
+
+    for (unsigned j = 0; j < *numEdges; j++) {
+        unsigned source, destination;
+        fscanf(graphFile, "%u %u", &source, &destination);
+        (*nodeList)[source].neighbors[(*nodeList)[source].numNeighbors] = destination;
+        (*nodeList)[source].numNeighbors++;
+        (*nodeList)[destination].neighbors[(*nodeList)[destination].numNeighbors] = source;
+        (*nodeList)[destination].numNeighbors++;
+    }
+
+    fclose(graphFile);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
 int main(int argc, char* argv[]) {
-    // Check for the correct number of command line arguments
     if (argc != 2) {
         printf("Usage: %s <graph_file>\n", argv[0]);
         return -1;
     }
 
-    FILE* defgraph;
-    node* nodelist;
-    unsigned i, j;
-    unsigned gsize, gorder, or, dest;
+    GraphNodeStructure* nodeList;
+    unsigned numNodes, numEdges;
 
-    defgraph = fopen(argv[1], "r");
-    if (defgraph == NULL) {
-        printf("\nERROR: Data file not found.\n");
+    if (ReadGraphFromFile(argv[1], &nodeList, &numNodes, &numEdges) != 0) {
         return -1;
     }
 
-    // Read the number of nodes and edges from the file
-    fscanf(defgraph, "%u", &gorder);
-    fscanf(defgraph, "%u", &gsize);
+    printf("%s defines a graph with %u nodes and %u edges.\n", argv[1], numNodes, numEdges);
 
-    if ((nodelist = (node*)malloc(gorder * sizeof(node))) == NULL) {
-        fprintf(stderr, "\nERROR: not enough memory for allocating the nodes\n\n");
-        return 2;
-    }
-
-    printf("%s defines a graph with %d nodes and %d edges.\n", argv[1], gorder, gsize);
-
-    for (i = 0; i < gorder; i++) {
-        nodelist[i].nedges = 0;
-        nodelist[i].visited = 0;
-    }
-
-    for (j = 0; j < gsize; j++) {
-        fscanf(defgraph, "%u %u", &or, &dest);
-        nodelist[or].edges[nodelist[or].nedges] = dest;
-        nodelist[or].nedges++;
-        nodelist[dest].edges[nodelist[dest].nedges] = or;
-        nodelist[dest].nedges++;
-    }
-
-    fclose(defgraph);
-
-    int isConnected = isGraphConnected(nodelist, gorder);
+    int isConnected = IsGraphConnected(nodeList, numNodes);
     if (isConnected) {
         printf("The graph is connected.\n");
     } else {
         printf("The graph is not connected.\n");
     }
 
-    free(nodelist);
+    free(nodeList);
     return isConnected;
 }

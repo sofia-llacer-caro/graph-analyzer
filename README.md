@@ -28,13 +28,12 @@ Ex1.c : Examines the information of the .txt file and determines whether the gra
 
 [comment]: <> (Here is the definition of connectedness)
 
+An undirected graph is connected when there is a path between each pair of vertices (i.e., there are no inaccessible vertices).
+Where a connected component is taken to be the following:
+A connected component of an undirected graph is a maximal connected subgraph. Note that each vertex and each edge belongs to a single connected component.
+
+The connectedness of the graph was found using the BFS (breadth-first-search) algorithm.
 
 The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.
 
-Checking the connectedness of a graph. Given the following definition of connectedness:
-An undirected graph is connected when there is a path between each pair of vertices (i.e., there are no inaccessible vertices).
-
 The code of Ex0.c included most of the information in the main function. Even though this is appropriate for the extension of that part, as I started coding from part 1 on I realized that the code soon started to get very long. In order to increase its readability, I decided to move the part which reads the .txt file into a function before the main part of the program. This way, all the functions could be defined in the preable and then called in the main part of the code, making it easier to read and explain.
-
-Where a connected component is taken to be the following:
-A connected component of an undirected graph is a maximal connected subgraph. Note that each vertex and each edge belongs to a single connected component.

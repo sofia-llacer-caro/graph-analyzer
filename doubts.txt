@@ -1,1 +1,0 @@
-- In Ex0, why is the limit in number of edges per node 8?

@@ -1,6 +1,9 @@
 // Author: Sofia Llàcer Caro
 // NIA: 1692021
 
+/*THIS FAILS FOR GRAPH 3, IT SAYS IT'S NOT A TREE, WHEN IT ACTUALLY IS ONE*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
