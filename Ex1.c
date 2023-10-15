@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <limits.h>
 
+/*
+---------------------
+1. Queue structure
+---------------------
+*/
+
+
 // Define a structure for a node in the queue
 typedef struct QueueElementStructure {
     unsigned short vertex;
@@ -54,12 +61,26 @@ unsigned int dequeue(Queue* Q) {
     return v;
 }
 
+/*
+---------------------
+2. Node structure
+---------------------
+*/
+
+
 // Define a structure for a graph node
 typedef struct {
     unsigned nedges;
     unsigned edges[8];
     int visited;
 } node;
+
+/*
+---------------------
+3. BFS algorithm
+---------------------
+*/
+
 
 // Function to check if the graph is connected using BFS
 int isGraphConnected(node* nodelist, unsigned gorder) {
