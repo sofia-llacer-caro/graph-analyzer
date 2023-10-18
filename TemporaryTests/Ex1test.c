@@ -7,7 +7,7 @@
 // Define the node structure
 typedef struct {
     unsigned nedges;
-    unsigned edges[8]; // Limit of edges in a node = 8
+    unsigned edges[8];
     int visited;
 } node;
 
@@ -51,14 +51,14 @@ unsigned int DequeueGraphNode(Queue* Q) {
 
 /* Read file */
 int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, unsigned* gsize) {
-    FILE* graphFile = fopen(fileName, "r");
-    if (graphFile == NULL) {
+    FILE* defgraph = fopen(fileName, "r");
+    if (defgraph == NULL) {
         printf("\nERROR: Data file not found.\n");
         return -1;
     }
 
-    fscanf(graphFile, "%u", gorder);
-    fscanf(graphFile, "%u", gsize);
+    fscanf(defgraph, "%u", gorder);
+    fscanf(defgraph, "%u", gsize);
 
     if ((*nodelist = (node*)malloc(*gorder * sizeof(node))) == NULL) {
         fprintf(stderr, "\nERROR: Not enough memory for allocating the nodes\n\n");
@@ -72,14 +72,14 @@ int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, u
 
     for (unsigned j = 0; j < *gsize; j++) {
         unsigned or, dest;
-        fscanf(graphFile, "%u %u", &or, &dest);
+        fscanf(defgraph, "%u %u", &or, &dest);
         (*nodelist)[or].edges[(*nodelist)[or].nedges] = dest;
         (*nodelist)[or].nedges++;
         (*nodelist)[dest].edges[(*nodelist)[dest].nedges] = or;
         (*nodelist)[dest].nedges++;
     }
 
-    fclose(graphFile);
+    fclose(defgraph);
     return 0;
 }
 
@@ -127,27 +127,21 @@ int main(int argc, char* argv[]) {
 
     if (ReadGraphFromFile(argv[1], &nodelist, &gorder, &gsize) != 0) {
         return -1;
-    }
-
-    printf("%s defines a graph with %u nodes and %u edges.\n", argv[1], gorder, gsize);
+    }    
+    printf("%d\n", IsGraphConnected(nodelist, gorder));
+/*
 
     int isConnected = IsGraphConnected(nodelist, gorder);
+     
     if (isConnected) {
         printf("The graph is connected.\n");
     } else {
         printf("The graph is not connected.\n");
     }
-
-    // Print node information
-    for (unsigned i = 0; i < gorder; i++) {
-        printf("Node %u has %u edges:\n", i, nodelist[i].nedges);
-        for (unsigned j = 0; j < nodelist[i].nedges; j++) {
-            printf("  %u --> %u\n", i, nodelist[i].edges[j]);
-        }
-    }
+  */
 
     // Clean up memory
     free(nodelist);
-
-    return isConnected;
+/*
+    return isConnected;  */
 }

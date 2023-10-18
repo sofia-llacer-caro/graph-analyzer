@@ -6,7 +6,7 @@
 
 typedef struct{
     unsigned nedges;
-    unsigned edges[8]; // limit of edges in a node = 8
+    unsigned edges[8];
 }node;
 
 int main(int argc,char *argv[]){
