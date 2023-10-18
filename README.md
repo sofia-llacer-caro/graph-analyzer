@@ -5,17 +5,12 @@ In order to use this programme, it needs to be executed using a .txt file contai
 Note that the first line of the .txt file includes the order of the graph (number of nodes) and the second line includes the number of edges in the graph. From then on, information on the connections between nodes is provided. A limitation of the programmes in this repository is that only one graph can be evaluated at a time and also that the programme can, for now, only take graphs where the number of edges is less than 8 and considers the edges to be undirected.
 
 # Approach
-[comment]: <> (BFS implementation explanation)
 
 The breadth-first-search (BFS) algorithm was implemented in order to performing the tasks of examining connectedness, number of connected components and whether the graph is a tree. BFS is an algorithm that traverses a graph in layers, exploring all neighbors of a node before moving on to their neighbors. This code uses BFS to explore a given graph, starting from a particular node and systematically visiting its neighbors.
 
 A queue structure was used to manage the order of node traversal in BFS. First, the queue is initialized with no elements. Then, the BFS enqueues a node considered the source and marks it as visited. It dequeues a node from the front of the queue, corresponding to a neighbor of the source node. They are marked as visited as the exploration of the nodes in the queue progresses. This process continues, ensuring that all neighbors at the current level are visited before moving to the next level.
 
 Note that the code of Ex0.c included most of the information in the main function. Even though this is appropriate for the extension of that part, as I started coding from part 1 on I realized that the code soon started to get very long. In order to increase its readability, I decided to move the part which reads the .txt file into a function before the main part of the program. This way, all the functions could be defined in the preable and then called in the main part of the code, making it easier to read and explain.
-
-
-
-
 
 # Programs included
 ## Ex0.c: Basic graph information
@@ -36,10 +31,6 @@ Node 3 has 2 edges:
   3 --> 1
   3 --> 2
 ```
-
-
-
-
 
 ## Ex1.c: Graph connectedness
 Ex1.c : Examines the information of the .txt file and determines whether the graph is connected or not connected. This is done by evaluating whether all the nodes of the graph were visited in the BFS algorithm. The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.

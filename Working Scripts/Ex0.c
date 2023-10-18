@@ -14,7 +14,6 @@ int main(int argc,char *argv[]){
     node * nodelist;
     unsigned i,j;
     unsigned gsize,gorder,or,dest;
-    // Note: Only one command-line argument is expected, argc is not necessary. Included for code robustness (PROF DOUBT)
 
     defgraph=fopen(argv[1],"r");
     if(defgraph==NULL){
