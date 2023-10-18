@@ -10,7 +10,7 @@
 // Define a structure for a node in the queue
 typedef struct GraphNodeStructure {
     unsigned short node;
-    struct GraphNodeStructure* next;
+    struct GraphNodeStructure* next; // Linked structure
     unsigned numNeighbors;
     unsigned neighbors[8];
     int visited;
@@ -59,35 +59,6 @@ unsigned int DequeueGraphNode(Queue* Q) {
     return nodeValue;
 }
 
-    /*Connectedness*/
-
-int IsGraphConnected(GraphNodeStructure* nodeList, unsigned numNodes) {
-    Queue queue;
-    queue.front = queue.rear = NULL;
-
-    nodeList[0].visited = 1;
-    EnqueueGraphNode(0, &queue);
-
-    while (!IsGraphQueueEmpty(&queue)) {
-        unsigned currentNode = DequeueGraphNode(&queue);
-        for (unsigned i = 0; i < nodeList[currentNode].numNeighbors; i++) {
-            unsigned neighbor = nodeList[currentNode].neighbors[i];
-            if (!nodeList[neighbor].visited) {
-                nodeList[neighbor].visited = 1;
-                EnqueueGraphNode(neighbor, &queue);
-            }
-        }
-    }
-
-    for (unsigned i = 0; i < numNodes; i++) {
-        if (nodeList[i].visited == 0) {
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
     /*Read file*/
 
 int ReadGraphFromFile(const char* fileName, GraphNodeStructure** nodeList, unsigned* numNodes, unsigned* numEdges) {
@@ -120,6 +91,34 @@ int ReadGraphFromFile(const char* fileName, GraphNodeStructure** nodeList, unsig
     return 0;
 }
 
+    /*Connectedness*/
+
+int IsGraphConnected(GraphNodeStructure* nodeList, unsigned numNodes) {
+    Queue queue;
+    queue.front = queue.rear = NULL;
+
+    nodeList[0].visited = 1;
+    EnqueueGraphNode(0, &queue);
+
+    while (!IsGraphQueueEmpty(&queue)) {
+        unsigned currentNode = DequeueGraphNode(&queue);
+        for (unsigned i = 0; i < nodeList[currentNode].numNeighbors; i++) {
+            unsigned neighbor = nodeList[currentNode].neighbors[i];
+            if (!nodeList[neighbor].visited) {
+                nodeList[neighbor].visited = 1;
+                EnqueueGraphNode(neighbor, &queue);
+            }
+        }
+    }
+
+    for (unsigned i = 0; i < numNodes; i++) {
+        if (nodeList[i].visited == 0) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 
 
