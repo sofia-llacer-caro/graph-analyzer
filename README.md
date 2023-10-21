@@ -12,6 +12,8 @@ A queue structure was used to manage the order of node traversal in BFS. First, 
 
 Note that the code of Ex0.c included most of the information in the main function. Even though this is appropriate for the extension of that part, as I started coding from part 1 on I realized that the code soon started to get very long. In order to increase its readability, I decided to move the part which reads the .txt file into a function before the main part of the program. This way, all the functions could be defined in the preable and then called in the main part of the code, making it easier to read and explain.
 
+To introduce the ```ReadGraphFromFile``` function, a redistribution of memory allocation was performed in the script. This was achieved by encapsulating memory allocation within the ```ReadGraphFromFile``` function, which is responsible for allocating memory for the graph data structure (```nodelist```). By using a pointer to a pointer (```node** nodelist```) and a pointer (```unsigned* gorder```) as function parameters, the allocated memory for nodelist is passed back to the main function. This approach enhances code modularity and organization by isolating memory allocation within a dedicated function while maintaining clean and readable code in the main function.
+
 # Programs included
 ## Ex0.c: Basic graph information
 Ex0.c checks the information encoded in the .txt file and provides a detailed explanation of the propoerties of the graph, included its node-by-node connections. An output like such is expected if the .txt file is properly formatted:\
