@@ -4,6 +4,8 @@ In order to use this programme, it needs to be executed using a .txt file contai
 ![Alt text](SampleGraphDiagram.png?raw=true "Sample graph's diagram")\
 Note that the first line of the .txt file includes the order of the graph (number of nodes) and the second line includes the number of edges in the graph. From then on, information on the connections between nodes is provided. A limitation of the programmes in this repository is that only one graph can be evaluated at a time and also that the programme can, for now, only take graphs where the number of edges is less than 8 and considers the edges to be undirected.
 
+[comment]: <> (Add a little instruction on how to run it (command-line).)
+
 # Approach
 
 The breadth-first-search (BFS) algorithm was implemented in order to performing the tasks of examining connectedness, number of connected components and whether the graph is a tree. BFS is an algorithm that traverses a graph in layers, exploring all neighbors of a node before moving on to their neighbors. This code uses BFS to explore a given graph, starting from a particular node and systematically visiting its neighbors.
@@ -35,7 +37,11 @@ Node 3 has 2 edges:
 ```
 
 ## Ex1.c: Graph connectedness
-Ex1.c : Examines the information of the .txt file and determines whether the graph is connected or not connected. This is done by evaluating whether all the nodes of the graph were visited in the BFS algorithm. The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.
+This program examines the information of the .txt file and determines whether the graph is connected or not connected. This is done by evaluating whether all the nodes of the graph were visited in the BFS algorithm. The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.
 
+## Ex2.c: Number of connected components
+This script introduces a modification with respect to Ex1.c on part 2.3. the code (Connectedness). Here, the number of connected components is calculated and printed.
 
+## Ex3.c: Is graph a tree?
+A tree is an undirected graph which is connected and acyclic. This program incoporates these conditions in order to evaluate whether the graph ptovided as an argument is a tree or not. If these conditions are both true for a given graph, the program prints "Graph is a tree.". Otherways, it prints "Graph is not a tree.".
 
