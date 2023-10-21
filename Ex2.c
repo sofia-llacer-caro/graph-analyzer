@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_NODES 8
+
 /* 
 ---------------------
 1. Define structures 
@@ -9,7 +11,7 @@
 
 typedef struct {
     unsigned nedges;
-    unsigned edges[8];
+    unsigned edges[MAX_NODES];
     int visited;
 } node;
 
