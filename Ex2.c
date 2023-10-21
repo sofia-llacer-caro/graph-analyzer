@@ -1,6 +1,3 @@
-// Author: Sofia Llàcer Caro
-// NIA: 1692021
-
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,47 +1,54 @@
-This repository contains the code written for one of the assignments of the course Optimisation as part of the Modelling for Science and Engineering MSc at the Universitat Autònoma de Barcelona (academic year 2023 - 2024). Note that the code in Ex0.c was kindly provided by the professor as a basis to build our own. The aim of the assignment was to examine different properties of a given graph (in the context of graph theory).
+# Assignment - Graph Properties Examiner
 
-In order to use this programme, it needs to be executed using a .txt file containing a sample graph as a command-line argument. The graph's information should be formatted as is exemplified in the file 'SampleGraph.txt', which corresponds to the following diagram:\
-![Alt text](SampleGraphDiagram.png?raw=true "Sample graph's diagram")\
-Note that the first line of the .txt file includes the order of the graph (number of nodes) and the second line includes the number of edges in the graph. From then on, information on the connections between nodes is provided. A limitation of the programmes in this repository is that only one graph can be evaluated at a time and also that the programme can, for now, only take graphs where the number of edges is less than a given integer and considers the edges to be undirected. The maximum number of edges is set to 8 in the scripts that are provided in the repository for memory saving purposes, as the graphs analysed did not have more than this number. However, this can be changed to suit bigger graphs.
+This repository contains code written for an assignment as part of the Modelling for Science and Engineering MSc at the Universitat Autònoma de Barcelona during the academic year 2023 - 2024. The assignment focuses on examining various properties of graphs in the context of graph theory.
 
-[comment]: <> (Add a little instruction on how to run it (command-line).)
+## Usage
 
-# Approach
+To use this program, execute it with a `.txt` file containing a sample graph as a command-line argument. The graph's information should be formatted as exemplified in the file 'SampleGraph.txt'.
 
-The breadth-first-search (BFS) algorithm was implemented in order to performing the tasks of examining connectedness, number of connected components and whether the graph is a tree. BFS is an algorithm that traverses a graph in layers, exploring all neighbors of a node before moving on to their neighbors. This code uses BFS to explore a given graph, starting from a particular node and systematically visiting its neighbors.
+1. Compilation: to compile a specific program (e.g., Ex0.c), use the following command:
+   ```bash
+   gcc Ex0.c -o Ex0
 
-A queue structure was used to manage the order of node traversal in BFS. First, the queue is initialized with no elements. Then, the BFS enqueues a node considered the source and marks it as visited. It dequeues a node from the front of the queue, corresponding to a neighbor of the source node. They are marked as visited as the exploration of the nodes in the queue progresses. This process continues, ensuring that all neighbors at the current level are visited before moving to the next level.
+2. Execution: execute the program with a sample graph file (e.g., SampleGraph.txt) by running:
+   ```bash
+    ./Ex0 SampleGraph.txt
 
-Note that the code of Ex0.c included most of the information in the main function. Even though this is appropriate for the extension of that part, as I started coding from part 1 on I realized that the code soon started to get very long. In order to increase its readability, I decided to move the part which reads the .txt file into a function before the main part of the program. This way, all the functions could be defined in the preable and then called in the main part of the code, making it easier to read and explain.
+**Limitations:**
 
-To introduce the ```ReadGraphFromFile``` function, a redistribution of memory allocation was performed in the script. This was achieved by encapsulating memory allocation within the ```ReadGraphFromFile``` function, which is responsible for allocating memory for the graph data structure (```nodelist```). By using a pointer to a pointer (```node** nodelist```) and a pointer (```unsigned* gorder```) as function parameters, the allocated memory for nodelist is passed back to the main function. This approach enhances code modularity and organization by isolating memory allocation within a dedicated function while maintaining clean and readable code in the main function.
+- This program evaluates one graph at a time.
+- It only accepts graphs with a number of edges less than a specified integer (changeable).
+- The program treats edges as undirected.
+- The maximum number of edges is initially set to 8 for memory-saving purposes, which can be adjusted for larger graphs.
 
-# Programs included
-## Ex0.c: Basic graph information
-Ex0.c checks the information encoded in the .txt file and provides a detailed explanation of the propoerties of the graph, included its node-by-node connections. An output like such is expected if the .txt file is properly formatted:\
-```
-SampleGraph.txt defines a graph with 4 nodes and 4 edges.
+## Approach
 
-Node 0 has 1 edges:
-  0 --> 1
-Node 1 has 3 edges:
-  1 --> 0
-  1 --> 2
-  1 --> 3
-Node 2 has 2 edges:
-  2 --> 1
-  2 --> 3
-Node 3 has 2 edges:
-  3 --> 1
-  3 --> 2
-```
+The program utilizes the breadth-first-search (BFS) algorithm to examine connectedness, the number of connected components, and whether the graph is a tree. The BFS algorithm systematically traverses the graph in layers, exploring all neighbors of a node before moving on to their neighbors.
 
-## Ex1.c: Graph connectedness
-This program examines the information of the .txt file and determines whether the graph is connected or not connected. This is done by evaluating whether all the nodes of the graph were visited in the BFS algorithm. The output of the program corresponds to 1 if the graph is connected and 0 if it is not connected.
+A queue structure is used to manage the order of node traversal in BFS. The queue is initialized with no elements. The BFS enqueues a source node and marks it as visited. It dequeues nodes corresponding to neighbors of the source node and continues this process, marking nodes as visited as the exploration progresses.
 
-## Ex2.c: Number of connected components
-This script introduces a modification with respect to Ex1.c on part 2.3. the code (Connectedness). Here, the number of connected components is calculated and printed.
+## Code Structure
 
-## Ex3.c: Is graph a tree?
-A tree is an undirected graph which is connected and acyclic. This program incoporates these conditions in order to evaluate whether the graph ptovided as an argument is a tree or not. If these conditions are both true for a given graph, the program prints "Graph is a tree.". Otherways, it prints "Graph is not a tree.".
+In an effort to improve code readability, a `ReadGraphFromFile` function is introduced. This function handles memory allocation for the graph data structure (`nodelist`) and passes allocated memory back to the main function. This approach enhances code modularity and organization.
 
+## Programs Included
+
+### Ex0.c: Basic Graph Information
+
+Ex0.c examines the information encoded in the .txt file and provides a detailed explanation of the graph's properties, including its node-by-node connections.
+
+### Ex1.c: Graph Connectedness
+
+This program evaluates whether the graph is connected or not connected. The output is 1 for a connected graph and 0 for a disconnected graph.
+
+### Ex2.c: Number of Connected Components
+
+This script calculates and prints the number of connected components in the graph.
+
+### Ex3.c: Is the Graph a Tree?
+
+A tree is an undirected graph that is both connected and acyclic. Ex3.c evaluates these conditions to determine whether the provided graph is a tree or not. It prints "Graph is a tree" if both conditions are met, otherwise, it prints "Graph is not a tree."
+
+---
+
+*Author: Sofia Llàcer Caro*
