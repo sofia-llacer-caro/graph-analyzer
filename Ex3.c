@@ -1,21 +1,11 @@
-// Author: [Your Name]
-// NIA: [Your NIA]
-
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the maximum number of nodes based on the node structure's limit.
 #define MAX_NODES 8
-
-/* 
----------------------
-1. Define structures 
----------------------
-*/
 
 typedef struct {
     unsigned nedges;
-    unsigned edges[MAX_NODES]; // Use MAX_NODES for the limit
+    unsigned edges[MAX_NODES];
     int visited;
 } node;
 
@@ -26,16 +16,6 @@ typedef struct {
     unsigned short capacity;
     unsigned short* array;
 } Queue;
-
-/* 
---------------------
-2. Define functions 
---------------------
-*/
-
-/* 
-2.1. Queue 
-*/
 
 int IsGraphQueueEmpty(Queue* Q) {
     return (Q->size == 0);
@@ -62,10 +42,6 @@ unsigned int DequeueGraphNode(Queue* Q) {
 
     return nodeValue;
 }
-
-/* 
-2.2. Read file 
-*/
 
 int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, unsigned* gsize) {
     FILE* defgraph = fopen(fileName, "r");
@@ -101,10 +77,6 @@ int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, u
     return 0;
 }
 
-/* 
-2.3. Connectedness 
-*/
-
 int IsGraphConnected(node* nodelist, unsigned gorder) {
     Queue queue;
     queue.front = queue.rear = 0;
@@ -137,11 +109,6 @@ int IsGraphConnected(node* nodelist, unsigned gorder) {
     return 1;
 }
 
-
-/* 
-2.4. Acyclicity 
-*/
-
 int IsGraphAcyclicUtil(node* nodelist, unsigned vertex, int parent, int* visited);
 
 int IsGraphAcyclic(node* nodelist, unsigned gorder) {
@@ -170,14 +137,8 @@ int IsGraphAcyclicUtil(node* nodelist, unsigned vertex, int parent, int* visited
             return 1; // The graph is cyclic.
         }
     }
-    return 0; // The graph is acyclic.
+    return 0; // The graph is acyclic.S
 }
-
-/* 
----------------------------
-3. Command-line Argument Processing 
----------------------------
-*/
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -190,7 +151,7 @@ int main(int argc, char* argv[]) {
 
     if (ReadGraphFromFile(argv[1], &nodelist, &gorder, &gsize) != 0) {
         return -1;
-    }    
+    }
 
     int connected = IsGraphConnected(nodelist, gorder);
     int acyclic = IsGraphAcyclic(nodelist, gorder);

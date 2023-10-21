@@ -2,7 +2,7 @@ This repository contains the code written for one of the assignments of the cour
 
 In order to use this programme, it needs to be executed using a .txt file containing a sample graph as a command-line argument. The graph's information should be formatted as is exemplified in the file 'SampleGraph.txt', which corresponds to the following diagram:\
 ![Alt text](SampleGraphDiagram.png?raw=true "Sample graph's diagram")\
-Note that the first line of the .txt file includes the order of the graph (number of nodes) and the second line includes the number of edges in the graph. From then on, information on the connections between nodes is provided. A limitation of the programmes in this repository is that only one graph can be evaluated at a time and also that the programme can, for now, only take graphs where the number of edges is less than 8 and considers the edges to be undirected.
+Note that the first line of the .txt file includes the order of the graph (number of nodes) and the second line includes the number of edges in the graph. From then on, information on the connections between nodes is provided. A limitation of the programmes in this repository is that only one graph can be evaluated at a time and also that the programme can, for now, only take graphs where the number of edges is less than a given integer and considers the edges to be undirected. The maximum number of edges is set to 8 in the scripts that are provided in the repository for memory saving purposes, as the graphs analysed did not have more than this number. However, this can be changed to suit bigger graphs.
 
 [comment]: <> (Add a little instruction on how to run it (command-line).)
 
