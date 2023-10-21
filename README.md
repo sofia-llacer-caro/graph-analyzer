@@ -4,7 +4,8 @@ This repository contains code written for an assignment as part of the Modelling
 
 ## Usage
 
-To use this program, execute it with a `.txt` file containing a sample graph as a command-line argument. The graph's information should be formatted as exemplified in the file 'SampleGraph.txt', which represent [![this graph](SampleGraphDiagram.png)](SampleGraphDiagram.png).
+To use this program, execute it with a `.txt` file containing a sample graph as a command-line argument. The graph's information should be formatted as exemplified in the file 'SampleGraph.txt', which represent [this graph](SampleGraphDiagram.png).
+
 
 1. Compilation: to compile a specific program (e.g., Ex0.c), use the following command:
    ```bash
