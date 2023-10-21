@@ -4,14 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the node structure
+/* 
+---------------------
+1. Define structures 
+---------------------
+*/
+
 typedef struct {
     unsigned nedges;
     unsigned edges[8];
     int visited;
 } node;
 
-// Define the queue structure
 typedef struct {
     unsigned short front;
     unsigned short rear;
@@ -20,9 +24,18 @@ typedef struct {
     unsigned short* array;
 } Queue;
 
-/* Define functions */
 
-/* Queue */
+/* 
+--------------------
+2. Define functions 
+--------------------
+*/
+
+
+/* 
+2.1. Queue
+ */
+
 int IsGraphQueueEmpty(Queue* Q) {
     return (Q->size == 0);
 }
@@ -30,7 +43,7 @@ int IsGraphQueueEmpty(Queue* Q) {
 int EnqueueGraphNode(unsigned short nodeValue, Queue* Q) {
     if (Q->size == Q->capacity)
         return 0; // Queue is full
-
+    
     Q->array[Q->rear] = nodeValue;
     Q->rear = (Q->rear + 1) % Q->capacity;
     Q->size++;
@@ -41,7 +54,7 @@ int EnqueueGraphNode(unsigned short nodeValue, Queue* Q) {
 unsigned int DequeueGraphNode(Queue* Q) {
     if (IsGraphQueueEmpty(Q))
         return (unsigned int)-1; // Indicates an error condition
-
+    
     unsigned int nodeValue = Q->array[Q->front];
     Q->front = (Q->front + 1) % Q->capacity;
     Q->size--;
@@ -49,11 +62,16 @@ unsigned int DequeueGraphNode(Queue* Q) {
     return nodeValue;
 }
 
-/* Read file */
+
+/*
+2.2. Read file
+*/
+
 int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, unsigned* gsize) {
     FILE* defgraph = fopen(fileName, "r");
     if (defgraph == NULL) {
         printf("\nERROR: Data file not found.\n");
+
         return -1;
     }
 
@@ -62,6 +80,7 @@ int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, u
 
     if ((*nodelist = (node*)malloc(*gorder * sizeof(node))) == NULL) {
         fprintf(stderr, "\nERROR: Not enough memory for allocating the nodes\n\n");
+    
         return 2;
     }
 
@@ -80,10 +99,15 @@ int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, u
     }
 
     fclose(defgraph);
+
     return 0;
 }
 
-/* Connectedness */
+
+/*
+2.3. Connectedness
+*/
+
 int IsGraphConnected(node* nodelist, unsigned gorder) {
     Queue queue;
     queue.front = queue.rear = 0;
@@ -113,8 +137,16 @@ int IsGraphConnected(node* nodelist, unsigned gorder) {
     }
 
     free(queue.array);
+
     return 1;
 }
+
+
+/* 
+------------------------------------
+3. Command-line Argument Processing 
+------------------------------------
+*/
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -128,20 +160,8 @@ int main(int argc, char* argv[]) {
     if (ReadGraphFromFile(argv[1], &nodelist, &gorder, &gsize) != 0) {
         return -1;
     }    
+
     printf("%d\n", IsGraphConnected(nodelist, gorder));
-/*
 
-    int isConnected = IsGraphConnected(nodelist, gorder);
-     
-    if (isConnected) {
-        printf("The graph is connected.\n");
-    } else {
-        printf("The graph is not connected.\n");
-    }
-  */
-
-    // Clean up memory
-    free(nodelist);
-/*
-    return isConnected;  */
+    free(nodelist); // Clean up memory
 }
