@@ -3,6 +3,12 @@
 
 #define MAX_NODES 8
 
+/* 
+---------------------
+1. Define structures 
+---------------------
+*/
+
 typedef struct {
     unsigned nedges;
     unsigned edges[MAX_NODES];
@@ -16,6 +22,14 @@ typedef struct {
     unsigned short capacity;
     unsigned short* array;
 } Queue;
+
+/* 
+--------------------
+2. Define functions 
+--------------------
+*/
+
+/* 2.1. Queue */
 
 int IsGraphQueueEmpty(Queue* Q) {
     return (Q->size == 0);
@@ -42,6 +56,8 @@ unsigned int DequeueGraphNode(Queue* Q) {
 
     return nodeValue;
 }
+
+/* 2.2. Read file */
 
 int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, unsigned* gsize) {
     FILE* defgraph = fopen(fileName, "r");
@@ -77,6 +93,15 @@ int ReadGraphFromFile(const char* fileName, node** nodelist, unsigned* gorder, u
     return 0;
 }
 
+
+/*
+-----------------------
+3. Conditions for tree
+-----------------------
+*/
+
+/* 3.1. Connectedness */
+
 int IsGraphConnected(node* nodelist, unsigned gorder) {
     Queue queue;
     queue.front = queue.rear = 0;
@@ -109,36 +134,52 @@ int IsGraphConnected(node* nodelist, unsigned gorder) {
     return 1;
 }
 
-int IsGraphAcyclicUtil(node* nodelist, unsigned vertex, int parent, int* visited);
+/* 3.2. Acyclicity */
+int IsGraphAcyclicBFS(node* nodelist, unsigned gorder) {
+    Queue queue;
+    queue.front = queue.rear = 0;
+    queue.size = 0;
+    queue.capacity = gorder;
+    queue.array = (unsigned short*)malloc(gorder * sizeof(unsigned short));
 
-int IsGraphAcyclic(node* nodelist, unsigned gorder) {
     int visited[MAX_NODES];
+
     for (unsigned i = 0; i < gorder; i++) {
         visited[i] = 0;
     }
 
     for (unsigned i = 0; i < gorder; i++) {
-        if (!visited[i] && IsGraphAcyclicUtil(nodelist, i, -1, visited)) {
-            return 0; // The graph is cyclic.
+        if (!visited[i]) {
+            visited[i] = 1;
+            EnqueueGraphNode(i, &queue);
+
+            while (!IsGraphQueueEmpty(&queue)) {
+                unsigned currentNode = DequeueGraphNode(&queue);
+                for (unsigned j = 0; j < nodelist[currentNode].nedges; j++) {
+                    unsigned neighbor = nodelist[currentNode].edges[j];
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = 1;
+                        EnqueueGraphNode(neighbor, &queue);
+                    } else {
+                        free(queue.array);
+                        return 1; // The graph is cyclic.
+                    }
+                }
+            }
         }
     }
 
-    return 1; // The graph is acyclic.
+    free(queue.array);
+    return 0; // The graph is acyclic.
 }
 
-int IsGraphAcyclicUtil(node* nodelist, unsigned vertex, int parent, int* visited) {
-    visited[vertex] = 1;
-    for (unsigned i = 0; i < nodelist[vertex].nedges; i++) {
-        unsigned neighbor = nodelist[vertex].edges[i];
-        if (!visited[neighbor]) {
-            if (IsGraphAcyclicUtil(nodelist, neighbor, vertex, visited))
-                return 1; // The graph is cyclic.
-        } else if (neighbor != parent) {
-            return 1; // The graph is cyclic.
-        }
-    }
-    return 0; // The graph is acyclic.S
-}
+
+/* 
+----------------------------------------------------------------
+4. Command-line Argument Processing & Tree Condition Assessment
+----------------------------------------------------------------
+*/
+
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -154,7 +195,7 @@ int main(int argc, char* argv[]) {
     }
 
     int connected = IsGraphConnected(nodelist, gorder);
-    int acyclic = IsGraphAcyclic(nodelist, gorder);
+    int acyclic = IsGraphAcyclicBFS(nodelist, gorder);
 
     if (connected && acyclic) {
         printf("Graph is a tree.\n");

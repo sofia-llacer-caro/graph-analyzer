@@ -129,9 +129,9 @@ int CountConnectedComponents(node* nodelist, unsigned gorder) {
 }
 
 /* 
----------------------------
+------------------------------------
 3. Command-line Argument Processing 
----------------------------
+------------------------------------
 */
 
 int main(int argc, char* argv[]) {
