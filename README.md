@@ -20,7 +20,7 @@ To use this program, execute it with a `.txt` file containing a sample graph as 
 - This program evaluates one graph at a time.
 - It only accepts graphs with a number of edges less than a specified integer (changeable).
 - The program treats edges as undirected.
-- The maximum number of edges is initially set to 8 for memory-saving purposes, which can be adjusted for larger graphs.
+
 
 ## Approach
 
