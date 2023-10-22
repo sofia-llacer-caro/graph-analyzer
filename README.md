@@ -40,7 +40,7 @@ Ex0.c examines the information encoded in the .txt file and provides a detailed 
 
 ### Ex1.c: Graph Connectedness
 
-This program evaluates whether the graph is connected or not connected. The output is 1 for a connected graph and 0 for a disconnected graph.
+This program evaluates whether the graph is connected or not connected. The output is 1 for a connected graph and 0 for a non-connected graph.
 
 ### Ex2.c: Number of Connected Components
 
@@ -48,7 +48,7 @@ This script calculates and prints the number of connected components in the grap
 
 ### Ex3.c: Is the Graph a Tree?
 
-A tree is an undirected graph that is both connected and acyclic. Ex3.c evaluates these conditions to determine whether the provided graph is a tree or not. It prints "Graph is a tree" if both conditions are met, otherwise, it prints "Graph is not a tree."
+A tree is an undirected graph that is both connected and acyclic. Ex3.c evaluates these conditions to determine whether the provided graph is a tree or not. It prints 1 if both conditions are met (graph is a tree), otherwise, it prints 0 (graph is not a tree).
 
 ---
 

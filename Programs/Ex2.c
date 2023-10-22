@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
     }    
 
     int connectedComponents = CountConnectedComponents(nodelist, gorder);
-    printf("Number of connected components: %d\n", connectedComponents);
+    printf("%d\n", connectedComponents);
 
     free(nodelist); // Clean up memory
 }

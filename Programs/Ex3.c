@@ -198,12 +198,15 @@ int main(int argc, char* argv[]) {
 
     int connected = IsGraphConnected(nodelist, gorder);
     int acyclic = IsGraphAcyclicBFS(nodelist, gorder);
+    int treeTruth;
 
     if (connected && acyclic) {
-        printf("Graph is a tree.\n");
+        treeTruth = 1;
     } else {
-        printf("Graph is not a tree.\n");
+        treeTruth = 0;
     }
+
+    printf("%d\n",treeTruth);
 
     free(nodelist); // Clearn up memory
 }
